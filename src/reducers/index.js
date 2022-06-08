@@ -35,7 +35,7 @@ export default function movies(state = initialMovieState, action) {
       case SET_SHOW_FAVOURITES:
         return {
           ...state,
-          
+          showFavourites: action.val
         }
     default:
         return state;

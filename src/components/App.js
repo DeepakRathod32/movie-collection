@@ -2,7 +2,7 @@ import { data } from "./data";
 import React from "react";
 import Navbar from "./Navbar";
 import MovieCard from "./MovieCard";
-import { addMovies } from "../actions";
+import { addMovies, setShowFavourites } from "../actions";
 
 class App extends React.Component {
   componentDidMount() {
@@ -29,20 +29,27 @@ class App extends React.Component {
     return false;
   }
 
+  onChangeTab(val) {
+    this.props.store.dispatch(setShowFavourites(val))
+  }
+
   render() {
-    const { list } = this.props.store.getState(); // {list: [], favourites: []}
+    const { list, favourites, showFavourites } = this.props.store.getState(); // {list: [], favourites: []}
     console.log("Rendered", this.props.store.getState());
+    const displayMovie = showFavourites ? favourites : list;
+    console.log(displayMovie)
+
     return (
       <div className="App">
         <Navbar />
         <div className="main">
           <div className="tabs">
-            <div className="tab">Movies</div>
-            <div className="tab">Favourites</div>
+            <div className={`tab ${showFavourites ? '': 'active-tabs'}`}  onClick={() => this.onChangeTab(false)}>Movies</div>
+            <div className={`tab ${showFavourites ? 'active-tabs': ''}`} onClick={() => this.onChangeTab(true)}>Favourites</div>
           </div>
 
           <div className="list">
-            {list.map((movie, index) => {
+            {displayMovie.map((movie, index) => {
               return <MovieCard 
               movie={movie} 
               key={index} 
@@ -51,6 +58,7 @@ class App extends React.Component {
               />;
             })}
           </div>
+          {displayMovie.length === 0 ? <div className="no-movies">No Movies to display</div>: null}
         </div>
       </div>
     );
