@@ -24,6 +24,7 @@ const logger = ({dispatch, getState}) => (next) => (action) => {
   // logger code
   if(typeof action !== 'function'){
     console.log('ACTION TYPE = ', action.type);
+
   }
   next(action)
 }
